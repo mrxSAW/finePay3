@@ -139,7 +139,6 @@ public class exportFile {
                 cell.setCellValue(columns[i]);
                 cell.setCellStyle(headerStyle);
             }
-
             int rowNum = 1;
 
             double totalFacture = 0;

@@ -214,12 +214,8 @@ public static void enregistrerPayment(Scanner scanner) {
             double nouveauTotal = totalPaye + montantPaye;
             double remainingAfter = montantFacture - nouveauTotal;
 
-            String nouveauStatus;
-            if (nouveauTotal == montantFacture) {
-                nouveauStatus = "PAID";
-            } else {
-                nouveauStatus = "PARTIAL";
-            }
+            String nouveauStatus = getFactureStatut(nouveauTotal,montantFacture);
+
 
             String sqlUpdate = "UPDATE facture SET status = ? WHERE id = ?";
             try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
@@ -268,6 +264,14 @@ public static void enregistrerPayment(Scanner scanner) {
         }
     }
 }
+
+    public static String getFactureStatut(double nouveauTotal,double montantFacture) {
+        if (nouveauTotal == montantFacture) {
+            return  "PAID";
+        } else {
+            return "PENDING";
+        }
+    }
 
     public static void mettreAJourPyment(Scanner scanner) {
         try {
