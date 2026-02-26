@@ -383,4 +383,18 @@ public class exportFile {
             e.printStackTrace();
         }
     }
+
+
+
+    public static String generateFactureFileName(int id) {
+        return "facture_" + id + ".pdf";
+    }
+
+    public static String generateRecuFileName(int id) {
+        return "recu_" + id + ".pdf";
+    }
+
+    public static String generateRapportFileName(int mois, int annee) {
+        return "rapport" + String.format("%02d", mois) + annee + ".xls";
+    }
 }
