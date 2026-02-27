@@ -245,7 +245,7 @@ public static void enregistrerPayment(Scanner scanner) {
 
     } catch (Exception e) {
         try {
-            if (con != null) con.rollback(); // 🔥 rollback sécurisé
+            if (con != null) con.rollback(); //  rollback sécurisé
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

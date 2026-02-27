@@ -82,10 +82,10 @@ public class exportFile {
 
 
 
-    public static void exporterFacturesPrestataire() {
+    public static double exporterFacturesPrestataire() {
 
         Scanner scanner = new Scanner(System.in);
-
+        double totalFacture=0 ;
         System.out.print("Entrer votre ID Prestataire : ");
         int idPrestataire = Integer.parseInt(scanner.nextLine());
 
@@ -130,7 +130,7 @@ public class exportFile {
             DataFormat df = workbook.createDataFormat();
             moneyStyle.setDataFormat(df.getFormat("#,##0.00"));
 
-            // Header 5 colonnes
+            // Header  colonnes
             Row headerRow = sheet.createRow(0);
             String[] columns = {"ID", "Date", "Client", "Montant", "Statut"};
 
@@ -141,7 +141,7 @@ public class exportFile {
             }
             int rowNum = 1;
 
-            double totalFacture = 0;
+            totalFacture = 0;
             double totalPaye = 0;
 
             while (rs.next()) {
@@ -178,7 +178,7 @@ public class exportFile {
 
                 rowNum++; // ligne vide
 
-                // Lignes totaux visibles
+                // Lignes totaux
                 Row totalRow1 = sheet.createRow(rowNum++);
                 totalRow1.createCell(2).setCellValue("Total facturé");
                 Cell tf = totalRow1.createCell(3);
@@ -198,7 +198,7 @@ public class exportFile {
                 ta.setCellStyle(moneyStyle);
             }
 
-            // Auto-size colonnes visibles
+            // Auto-size colonnes
             for (int i = 0; i < columns.length; i++) {
                 sheet.autoSizeColumn(i);
             }
@@ -216,6 +216,7 @@ public class exportFile {
             System.out.println("Erreur export");
             e.printStackTrace();
         }
+        return totalFacture;
     }
 
     public static void exporterFacturImpier() {
