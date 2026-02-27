@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+        
 class ExportFileTest {
 
     private final InputStream originalIn = System.in;
@@ -116,4 +117,33 @@ class ExportFileTest {
             assertEquals(336.0, total, 0.0001);
         }
     }
+
+
+
+
+
+
+
+@Test
+        void testFactureFileName() {
+            String result = exportFile.generateFactureFileName(123);
+            assertEquals("facture_123.pdf", result);
+        }
+
+        @Test
+        void testRecuFileName() {
+            String result = exportFile.generateRecuFileName(456);
+            assertEquals("recu_456.pdf", result);
+        }
+
+        @Test
+        void testRapportFileName() {
+            String result = exportFile.generateRapportFileName(1, 2026);
+            assertEquals("rapport012026.xls", result);
+        }
+
+
+
+
+
 }

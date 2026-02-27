@@ -139,7 +139,6 @@ public class exportFile {
                 cell.setCellValue(columns[i]);
                 cell.setCellStyle(headerStyle);
             }
-
             int rowNum = 1;
 
             totalFacture = 0;
@@ -384,5 +383,19 @@ public class exportFile {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    public static String generateFactureFileName(int id) {
+        return "facture_" + id + ".pdf";
+    }
+
+    public static String generateRecuFileName(int id) {
+        return "recu_" + id + ".pdf";
+    }
+
+    public static String generateRapportFileName(int mois, int annee) {
+        return "rapport" + String.format("%02d", mois) + annee + ".xls";
     }
 }
