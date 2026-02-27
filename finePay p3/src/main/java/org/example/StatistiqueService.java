@@ -11,14 +11,14 @@ public class StatistiqueService {
         this.statistique = new Statistique();
     }
 
-    public void ajouterPaiement(double montant, int idFacture) {
+    public double ajouterPaiement(double montant, int idFacture) {
 
         String sqlCheckFacture = "SELECT montant, status FROM facture WHERE id = ?";
         String sqlTotalPaye = "SELECT COALESCE(SUM(montant),0) AS total FROM paiement WHERE idFacture = ?";
         String sqlInsertPaiement = "INSERT INTO paiement (montant, date, idFacture) VALUES (?, ?, ?)";
         String sqlInsertCommission = "INSERT INTO commission (idPaiement, tauxCommission, montant) VALUES (?, ?, ?)";
         String sqlUpdateFacture = "UPDATE facture SET status = ? WHERE id = ?";
-
+        double montantCommission=0;
         try (Connection conn = DBConnection.createConnection()) {
             conn.setAutoCommit(false);
 
@@ -32,7 +32,7 @@ public class StatistiqueService {
             if (!rsCheck.next()) {
                 System.out.println("Facture inexistante !");
                 conn.rollback();
-                return;
+                return 0;
             }
 
             montantFacture = rsCheck.getDouble("montant");
@@ -41,7 +41,7 @@ public class StatistiqueService {
             if ("PAID".equalsIgnoreCase(statusActuel)) {
                 System.out.println("Cette facture est deja payee.");
                 conn.rollback();
-                return;
+                return 0;
             }
 
             PreparedStatement psTotal = conn.prepareStatement(sqlTotalPaye);
@@ -64,13 +64,13 @@ public class StatistiqueService {
 
                 conn.commit();
                 System.out.println("Facture mise a jour: PAID");
-                return;
+                return 0;
             }
 
             if (montant <= 0 || montant > restant) {
                 System.out.println("Paiement refuse.");
                 conn.rollback();
-                return;
+                return 0;
             }
 
             PreparedStatement stmtPaiement = conn.prepareStatement(sqlInsertPaiement, Statement.RETURN_GENERATED_KEYS);
@@ -86,7 +86,7 @@ public class StatistiqueService {
             }
 
             double tauxCommission = 2.0;
-            double montantCommission = montant * tauxCommission / 100;
+            montantCommission = montant * tauxCommission / 100;
 
             PreparedStatement stmtCommission = conn.prepareStatement(sqlInsertCommission);
             stmtCommission.setInt(1, idPaiement);
@@ -113,6 +113,7 @@ public class StatistiqueService {
         } catch (SQLException e) {
             System.out.println("Erreur SQL : " + e.getMessage());
         }
+        return montantCommission;
     }
 
     public void afficherRapport() {
